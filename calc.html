@@ -8,6 +8,7 @@
     <input id="ao1" type="text" name="" value="">
     <input id="ao2" type="text" name="" value="">
     <button onclick="keisan()" type="button" name="button">計算</button>
+    <br>結果:
     <p id="result"></P>
     <script type="text/javascript">
 
@@ -18,8 +19,8 @@
 
       var result = parseInt( element1.value) + parseInt(element2.value
 );
-      var result_text=document.
-      alert(result);
+      var result_text=document.getElementById('result');
+      result_text.textContent=result;
     }
     </script>
   </body>
