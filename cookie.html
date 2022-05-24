@@ -9,29 +9,54 @@
   </head>
   <body>
     <script type="text/javascript">
-      count=0;
+      count=100;
+      ryousi_count=0;
+      same_count=0;
+      tyouri_count=0;
+
+      setInterval(screen_update,10);
+      function screen_update() {
+      span = document.getElementById('cookie_count')
+      span.textContent=count;
+    }
+
       function cookie_click() {
         span=document.getElementById('cookie_count')
         count++;
         span.textContent=count;
       }
-        function granma() {
-          setInterval(auto_CountUp,1000);
+        function ryousi() {
+          if(count>=100){
+            count-=100;
+            ryousi_count++;
+          setInterval(auto_CountUp,1000,1);
+         }
         }
-        function auto_CountUp() {
-          count+=1;
-            span=document.getElementById('cookie_count')
-            span.textContent=count;
-
+        function same() {
+          if(count>=300){
+            count-=300;
+              same_count++;
+          setInterval(auto_CountUp,1000,8);
+         }
         }
+        function tyouri() {
+          if(count>=10){
+            count-=10;
+            tyouri_count++;
+          setInterval(auto_CountUp,10000,1);
+         }
+        }
+        function auto_CountUp(num) {
+          count += num;
+            }
 
     </script>
     <p><span id="cookie_count"></span>切れ</p>
     <img onclick="cookie_click()" src="aaa.jpg" alt="">
     <ul>
-      <li onclick="granma()">新鮮</li>
-      <li>普通</li>
-      <li>廃棄</li>
+      <li onclick="ryousi()">漁師</li>
+      <li onclick="same()">サメ</li>
+      <li onclick="tyouri()">調理師</li>
     </ul>
   </body>
 </html>
