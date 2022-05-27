@@ -10,6 +10,18 @@
   <body>
     <script type="text/javascript">
       count=100;
+      let ls_count=localStorage.getItem("ls_count");
+      if(ls_count){
+        count=parseInt(ls_count);
+      }else{
+        count=0;
+      }
+
+      setInterval(hozon,1000);
+      function　hozon(){
+        localStorage.setItem("ls_count",count);
+      }
+
       ryousi_count=0;
       same_count=0;
       tyouri_count=0;
