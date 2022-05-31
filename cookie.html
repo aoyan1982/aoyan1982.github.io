@@ -4,7 +4,17 @@
     <meta charset="utf-8">
     <title></title>
     <style media="screen">
+    body{margin:0;height: 100vh}
+
       img{width:90%;}
+
+      .container{display:flex;height: }
+      .item1{flex-grow:2;
+            background-image:url("ddd.jpg");}
+      .item2{flex-grow:4;
+              background-image:url("bbb.jpg");}
+      .item3{flex-grow:3;
+              background-image:url("ddd.jpg");}
     </style>
   </head>
   <body>
@@ -63,12 +73,21 @@
             }
 
     </script>
-    <p><span id="cookie_count"></span>切れ</p>
-    <img onclick="cookie_click()" src="aaa.jpg" alt="">
-    <ul>
-      <li onclick="ryousi()">漁師</li>
-      <li onclick="same()">サメ</li>
-      <li onclick="tyouri()">調理師</li>
-    </ul>
+    <div class="container">
+      <div class="item1">
+      <p><span id="cookie_count"></span>切れ</p>
+      <img onclick="cookie_click()" src="aaa.jpg" alt="">
+    </div>
+    <div class="item2">
+      製作途中
+    </div>
+    <div class="item3">
+      <ul>
+        <li onclick="ryousi()">漁師</li>
+        <li onclick="same()">サメ</li>
+        <li onclick="tyouri()">調理師</li>
+      </ul>
+    </div>
+    </div>
   </body>
 </html>
