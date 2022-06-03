@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <link
+ rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
     <meta charset="utf-8">
     <title></title>
     <style media="screen">
@@ -43,6 +47,11 @@
     }
 
       function cookie_click() {
+        var cookie_img=document.getElementById('cookie_img');
+        cookie_img.classList.remove('animate__animated','animate__bounce');
+        void cookie_img.offsetWidth;
+        cookie_img.classList.add('animate__animated','animate__bounce');
+
         span=document.getElementById('cookie_count')
         count++;
         span.textContent=count;
@@ -75,8 +84,10 @@
     </script>
     <div class="container">
       <div class="item1">
-      <p><span id="cookie_count"></span>切れ</p>
-      <img onclick="cookie_click()" src="aaa.jpg" alt="">
+
+      <p class="animate__animated animate__bounce"
+      <span id="cookie_count"></span>切れ</p>
+      <img id="cookie_img" onclick="cookie_click()" src="aaa.jpg" alt="">
     </div>
     <div class="item2">
       製作途中
