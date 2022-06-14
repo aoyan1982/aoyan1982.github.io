@@ -19,10 +19,16 @@
               background-image:url("bbb.jpg");}
       .item3{flex-grow:3;
               background-image:url("ddd.jpg");}
+
+    #build_sell{
+      display: none;
+    }
     </style>
   </head>
   <body>
     <script type="text/javascript">
+    let event_ids=[];
+
       count=100;
       let ls_count=localStorage.getItem("ls_count");
       if(ls_count){
@@ -60,14 +66,26 @@
           if(count>=100){
             count-=100;
             ryousi_count++;
-          setInterval(auto_CountUp,1000,1);
+            let r_id=setInterval(auto_CountUp,1000,1);
+            event_ids.push(r_id);
          }
-        }
+       }
+         function sell_ryousi(){
+           let r_id=event_ids.pop();
+           clearInterval(r_id);
+
+         }
+
         function same() {
           if(count>=300){
             count-=300;
             same_count++;
           setInterval(auto_CountUp,1000,8);
+         }
+         function sell_same(){
+           let r_id=event_ids.pop();
+           clearInterval(r_id);
+
          }
         }
         function tyouri() {
@@ -76,10 +94,29 @@
             tyouri_count++;
           setInterval(auto_CountUp,10000,1);
          }
+         function sell_tyouri(){
+           let r_id=event_ids.pop();
+           clearInterval(r_id);
+
+         }
         }
         function auto_CountUp(num) {
           count += num;
-            }
+        }
+
+        function buildSwitch(){
+          let buy_element=document.getElementById('build_buy');
+          let sell_element=document.getElementById('build_sell');
+
+          if(buy_element.style.display !="none"){
+          buy_element.style.display="none";
+          sell_element.style.display="block";
+        }else {
+          buy_element.style.display="block";
+          sell_element.style.display="none";
+        }
+}
+
 
     </script>
     <div class="container">
@@ -93,11 +130,23 @@
       製作途中
     </div>
     <div class="item3">
+      <div id="build_buy">
+      <span onclick="buildSwitch()">購入</span>
+        <ul>
+          <li onclick="ryousi()">漁師</li>
+          <li onclick="same()">サメ</li>
+          <li onclick="tyouri()">調理師</li>
+        </ul>
+      </div>
+    <div id="build_sell">
+      <span onclick="buildSwitch()">売却</span>
       <ul>
-        <li onclick="ryousi()">漁師</li>
-        <li onclick="same()">サメ</li>
-        <li onclick="tyouri()">調理師</li>
+        <li onclick="sell_ryousi()">漁師</li>
+        <li onclick="sell_same()">サメ</li>
+        <li onclick="sell_tyouri()">調理師</li>
       </ul>
+    </div>
+
     </div>
     </div>
   </body>
