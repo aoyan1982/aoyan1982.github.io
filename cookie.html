@@ -27,7 +27,36 @@
   </head>
   <body>
     <script type="text/javascript">
+
     let event_ids=[];
+
+    class Building {
+      constructor(time,num) {
+        this.event_ids=[];
+        this.interval_time=time;
+        this.add_num=num;
+      }
+      count_up(num){
+        count+=num
+      }
+      buy(){
+        let self=this;
+        let return_id=setInterval(function(){
+            self.count_up(self.add_num);
+        },1000);
+        this.event_ids.push(return_id);
+      }
+      sell(){
+        let return_id=this.event_ids.pop();
+        clearInterval(return_id);
+      }
+    }
+
+    let ryousi=new Building(1000,1);
+    let same=new Building(1000,8);
+    let tyouri=new Building(10000,1);
+
+
 
       count=100;
       let ls_count=localStorage.getItem("ls_count");
@@ -62,7 +91,7 @@
         count++;
         span.textContent=count;
       }
-        function ryousi() {
+    /*    function ryousi() {
           if(count>=100){
             count-=100;
             ryousi_count++;
@@ -100,6 +129,7 @@
 
          }
         }
+        */
         function auto_CountUp(num) {
           count += num;
         }
@@ -133,17 +163,17 @@
       <div id="build_buy">
       <span onclick="buildSwitch()">購入</span>
         <ul>
-          <li onclick="ryousi()">漁師</li>
-          <li onclick="same()">サメ</li>
-          <li onclick="tyouri()">調理師</li>
+          <li onclick="ryousi.buy()">漁師</li>
+          <li onclick="same.buy()">サメ</li>
+          <li onclick="tyouri.buy()">調理師</li>
         </ul>
       </div>
     <div id="build_sell">
       <span onclick="buildSwitch()">売却</span>
       <ul>
-        <li onclick="sell_ryousi()">漁師</li>
-        <li onclick="sell_same()">サメ</li>
-        <li onclick="sell_tyouri()">調理師</li>
+        <li onclick="ryousi.sell()">漁師</li>
+        <li onclick="same.sell()">サメ</li>
+        <li onclick="tyouri.sell()">調理師</li>
       </ul>
     </div>
 
