@@ -31,30 +31,34 @@
     let event_ids=[];
 
     class Building {
-      constructor(time,num) {
+      constructor(time,num,cost) {
         this.event_ids=[];
         this.interval_time=time;
         this.add_num=num;
+        this.cost=cost;
       }
       count_up(num){
         count+=num
       }
       buy(){
-        let self=this;
-        let return_id=setInterval(function(){
+        if(count>=this.cost){
+          count-=this.cost;
+          let self=this;
+          let return_id=setInterval(function(){
             self.count_up(self.add_num);
-        },1000);
+        },self.interval_time);
         this.event_ids.push(return_id);
       }
+    }
       sell(){
         let return_id=this.event_ids.pop();
         clearInterval(return_id);
       }
     }
 
-    let ryousi=new Building(1000,1);
-    let same=new Building(1000,8);
-    let tyouri=new Building(10000,1);
+    let ryousi=new Building(1000,1,10);
+    let same=new Building(1000,8,100);
+    let tyouri=new Building(1000,16,500);
 
 
 
