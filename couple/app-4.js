@@ -16,7 +16,7 @@ $('#searchInput').oninput=renderWishlist;$('#filterChips').onclick=e=>{const b=e
 
 // Anniversary
 $('#addAnniversaryBtn').onclick=()=>openAnniversary();$('#closeAnniversary').onclick=()=>$('#anniversaryDialog').close();
-$('#anniversaryForm').onsubmit=async e=>{e.preventDefault();const id=$('#anniversaryId').value,payload={space_id:currentSpace.id,title:$('#anniversaryTitle').value.trim(),date:$('#anniversaryDate').value,repeat_type:$('#anniversaryRepeat').value,created_by:currentUser.id};let error;if(id)({error}=await sb.from('anniversaries').update(payload).eq('id',id));else({error}=await sb.from('anniversaries').insert(payload));if(error)return toast('保存できませんでした');$('#anniversaryDialog').close();await loadAnniversaries();renderHome();toast('記念日を保存しました 🎀')};
+$('#anniversaryForm').onsubmit=async e=>{e.preventDefault();const id=$('#anniversaryId').value,payload={space_id:currentSpace.id,title:$('#anniversaryTitle').value.trim(),date:$('#anniversaryDate').value,repeat_type:$('#anniversaryRepeat').value,created_by:currentUser.id};let result;if(id)result=await sb.from('anniversaries').update(payload).eq('id',id).select().single();else result=await sb.from('anniversaries').insert(payload).select().single();if(result.error){console.error('anniversary save',result.error);return toast('記念日を保存できませんでした: '+result.error.message)}$('#anniversaryDialog').close();await loadAnniversaries();renderHome();toast('記念日を保存しました 🎀（現在 '+anniversaries.length+'件）')};
 $('#deleteAnniversary').onclick=async()=>{const id=$('#anniversaryId').value;if(!id||!confirm('この記念日を削除しますか？'))return;await sb.from('anniversaries').delete().eq('id',id);$('#anniversaryDialog').close();await loadAnniversaries();renderHome()};
 
 // Settings
