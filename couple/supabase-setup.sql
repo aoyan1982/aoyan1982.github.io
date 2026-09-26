@@ -97,16 +97,52 @@ drop policy if exists "users delete own reflection" on public.memory_reflections
 create policy "users delete own reflection" on public.memory_reflections for delete to authenticated using(user_id=auth.uid());
 
 drop function if exists public.create_couple_space(text);
-create function public.create_couple_space(space_name text default 'ふたり日和') returns table(created_space_id uuid,generated_invite_code text) language plpgsql security definer set search_path=public as $
-declare new_space_id uuid; new_code text;
+create function public.create_couple_space(space_name text default 'ふたり日和')
+returns uuid
+language plpgsql
+security definer
+set search_path=public
+as $$
+declare
+  new_space_id uuid;
+  new_code text;
 begin
- if auth.uid() is null then raise exception 'Not authenticated'; end if;
- if exists(select 1 from public.couple_members where user_id=auth.uid()) then raise exception 'Already belongs to a space'; end if;
- loop new_code:=upper(substr(md5(random()::text || clock_timestamp()::text || auth.uid()::text),1,8)); exit when not exists(select 1 from public.couple_spaces cs where cs.invite_code=new_code); end loop;
- insert into public.couple_spaces(name,invite_code,created_by) values(coalesce(nullif(trim(space_name),''),'ふたり日和'),new_code,auth.uid()) returning id into new_space_id;
- insert into public.couple_members(space_id,user_id) values(new_space_id,auth.uid());
- return query select new_space_id,new_code;
-end $$;
+  if auth.uid() is null then
+    raise exception 'Not authenticated';
+  end if;
+
+  if exists (
+    select 1
+    from public.couple_members cm
+    where cm.user_id = auth.uid()
+  ) then
+    raise exception 'Already belongs to a space';
+  end if;
+
+  loop
+    new_code := upper(substr(md5(random()::text || clock_timestamp()::text || auth.uid()::text),1,8));
+    exit when not exists (
+      select 1
+      from public.couple_spaces cs
+      where cs.invite_code = new_code
+    );
+  end loop;
+
+  insert into public.couple_spaces(name, invite_code, created_by)
+  values (
+    coalesce(nullif(trim(space_name), ''), 'ふたり日和'),
+    new_code,
+    auth.uid()
+  )
+  returning public.couple_spaces.id into new_space_id;
+
+  insert into public.couple_members(space_id, user_id)
+  values (new_space_id, auth.uid());
+
+  return new_space_id;
+end;
+$$;
+
 create or replace function public.join_couple_space(code text) returns uuid language plpgsql security definer set search_path=public as $$
 declare target_id uuid; member_count integer;
 begin
