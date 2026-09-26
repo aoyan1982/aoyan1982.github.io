@@ -101,7 +101,7 @@ declare new_space_id uuid; new_code text;
 begin
  if auth.uid() is null then raise exception 'Not authenticated'; end if;
  if exists(select 1 from public.couple_members where user_id=auth.uid()) then raise exception 'Already belongs to a space'; end if;
- loop new_code:=upper(substr(md5(random()::text || clock_timestamp()::text || auth.uid()::text),1,8)); exit when not exists(select 1 from public.couple_spaces where invite_code=new_code); end loop;
+ loop new_code:=upper(substr(md5(random()::text || clock_timestamp()::text || auth.uid()::text),1,8)); exit when not exists(select 1 from public.couple_spaces cs where cs.invite_code=new_code); end loop;
  insert into public.couple_spaces(name,invite_code,created_by) values(coalesce(nullif(trim(space_name),''),'ふたり日和'),new_code,auth.uid()) returning id into new_space_id;
  insert into public.couple_members(space_id,user_id) values(new_space_id,auth.uid());
  return query select new_space_id,new_code;
@@ -111,7 +111,7 @@ declare target_id uuid; member_count integer;
 begin
  if auth.uid() is null then raise exception 'Not authenticated'; end if;
  if exists(select 1 from public.couple_members where user_id=auth.uid()) then raise exception 'Already belongs to a space'; end if;
- select id into target_id from public.couple_spaces where invite_code=upper(trim(code)); if target_id is null then raise exception 'Invite code not found'; end if;
+ select cs.id into target_id from public.couple_spaces cs where cs.invite_code=upper(trim(code)); if target_id is null then raise exception 'Invite code not found'; end if;
  perform 1 from public.couple_spaces where id=target_id for update; select count(*) into member_count from public.couple_members where space_id=target_id; if member_count>=2 then raise exception 'This space already has two members'; end if;
  insert into public.couple_members(space_id,user_id) values(target_id,auth.uid()); return target_id;
 end $$;
