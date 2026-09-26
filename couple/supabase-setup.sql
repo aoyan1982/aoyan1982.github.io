@@ -101,7 +101,7 @@ declare new_space_id uuid; new_code text;
 begin
  if auth.uid() is null then raise exception 'Not authenticated'; end if;
  if exists(select 1 from public.couple_members where user_id=auth.uid()) then raise exception 'Already belongs to a space'; end if;
- loop new_code:=upper(substr(encode(gen_random_bytes(5),'hex'),1,8)); exit when not exists(select 1 from public.couple_spaces where invite_code=new_code); end loop;
+ loop new_code:=upper(substr(md5(random()::text || clock_timestamp()::text || auth.uid()::text),1,8)); exit when not exists(select 1 from public.couple_spaces where invite_code=new_code); end loop;
  insert into public.couple_spaces(name,invite_code,created_by) values(coalesce(nullif(trim(space_name),''),'ふたり日和'),new_code,auth.uid()) returning id into new_space_id;
  insert into public.couple_members(space_id,user_id) values(new_space_id,auth.uid());
  return query select new_space_id,new_code;
