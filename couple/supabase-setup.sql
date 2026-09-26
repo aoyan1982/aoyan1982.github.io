@@ -96,7 +96,8 @@ create policy "users update own reflection" on public.memory_reflections for upd
 drop policy if exists "users delete own reflection" on public.memory_reflections;
 create policy "users delete own reflection" on public.memory_reflections for delete to authenticated using(user_id=auth.uid());
 
-create or replace function public.create_couple_space(space_name text default 'ふたり日和') returns table(space_id uuid,invite_code text) language plpgsql security definer set search_path=public as $$
+drop function if exists public.create_couple_space(text);
+create function public.create_couple_space(space_name text default 'ふたり日和') returns table(created_space_id uuid,generated_invite_code text) language plpgsql security definer set search_path=public as $
 declare new_space_id uuid; new_code text;
 begin
  if auth.uid() is null then raise exception 'Not authenticated'; end if;
