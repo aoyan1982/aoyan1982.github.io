@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff8f2" />
+  <meta name="description" content="登録不要ですぐ使える、会話のきっかけを見つける話題提供サイト。" />
+  <title>ハナシノタネ｜登録不要の話題ガチャ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <button class="brand" id="brandBtn" aria-label="ホームへ">
+        <span class="brand-mark">✦</span>
+        <span>ハナシノタネ</span>
+      </button>
+      <nav class="header-actions" aria-label="メニュー">
+        <button class="icon-btn" id="favoritesBtn" aria-label="お気に入り"><span>♡</span><small id="favoriteCount">0</small></button>
+        <button class="icon-btn" id="historyBtn" aria-label="履歴"><span>◷</span></button>
+      </nav>
+    </header>
+
+    <main id="mainView">
+      <section class="hero" id="homeSection">
+        <div class="eyebrow">登録不要・すぐ使える</div>
+        <h1>「何話そう？」を、<br><em>楽しい時間</em>に変える。</h1>
+        <p>相手や気分を選ぶだけ。あなたたちに合った話題をランダムで提案します。</p>
+      </section>
+
+      <section class="setup-card" id="setupCard">
+        <div class="step-block">
+          <div class="step-title"><span>1</span><div><strong>誰と話す？</strong><small>相手に合う話題を選びます</small></div></div>
+          <div class="chips" id="relationChips"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="step-block">
+          <div class="step-title"><span>2</span><div><strong>どんな話がしたい？</strong><small>複数選択できます</small></div></div>
+          <div class="chips category-chips" id="categoryChips"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="step-block compact-step">
+          <div class="step-title"><span>3</span><div><strong>話の深さ</strong><small>今の空気感に合わせて</small></div></div>
+          <div class="depth-control" id="depthControl">
+            <button data-depth="light">軽め</button>
+            <button data-depth="all" class="active">おまかせ</button>
+            <button data-depth="deep">深め</button>
+          </div>
+        </div>
+
+        <button class="primary-btn" id="startBtn">話題を出す <span>→</span></button>
+        <p class="pool-note" id="poolNote"></p>
+      </section>
+
+      <section class="quick-section">
+        <div class="section-heading"><div><span>迷ったら</span><h2>ワンタップでスタート</h2></div></div>
+        <div class="quick-grid">
+          <button class="quick-card" data-quick="fun"><span class="quick-icon">😂</span><strong>盛り上がる</strong><small>軽く楽しく</small></button>
+          <button class="quick-card" data-quick="deep"><span class="quick-icon">🌙</span><strong>深い話</strong><small>じっくり話す</small></button>
+          <button class="quick-card" data-quick="love"><span class="quick-icon">💗</span><strong>恋愛</strong><small>ふたりの話</small></button>
+          <button class="quick-card" data-quick="choice"><span class="quick-icon">⚖️</span><strong>もしも・二択</strong><small>迷って盛り上がる</small></button>
+        </div>
+      </section>
+
+      <section class="stats-strip">
+        <div><strong id="topicCount">800+</strong><span>話題を収録</span></div>
+        <div><strong>0円</strong><span>登録も不要</span></div>
+        <div><strong>端末保存</strong><span>履歴・お気に入り</span></div>
+      </section>
+    </main>
+
+    <section class="topic-screen hidden" id="topicScreen" aria-live="polite">
+      <div class="topic-topbar">
+        <button class="back-btn" id="backBtn">← 条件を変える</button>
+        <button class="tiny-btn" id="shuffleSettingsBtn">おまかせ</button>
+      </div>
+      <div class="topic-progress"><div id="progressBar"></div></div>
+      <div class="topic-meta" id="topicMeta"></div>
+      <article class="topic-card" id="topicCard">
+        <span class="quote-mark">“</span>
+        <h2 id="topicText">話題がここに表示されます</h2>
+        <div class="topic-actions">
+          <button id="favoriteTopicBtn"><span>♡</span> お気に入り</button>
+          <button id="doneTopicBtn"><span>✓</span> 話した</button>
+          <button id="copyTopicBtn"><span>⧉</span> コピー</button>
+        </div>
+      </article>
+
+      <div class="expand-panel hidden" id="expandPanel">
+        <div class="expand-title"><span>💬</span><strong>この話をもう少し広げる</strong></div>
+        <div id="relatedQuestions"></div>
+      </div>
+
+      <button class="secondary-btn" id="expandBtn">この話を広げる <span>＋</span></button>
+      <button class="next-btn" id="nextBtn">次の話題 <span>→</span></button>
+      <p class="remaining-note" id="remainingNote"></p>
+    </section>
+
+    <section class="list-screen hidden" id="listScreen">
+      <div class="list-header">
+        <button class="back-btn" id="listBackBtn">← 戻る</button>
+        <h2 id="listTitle">お気に入り</h2>
+        <button class="text-btn" id="clearListBtn">すべて削除</button>
+      </div>
+      <div class="list-content" id="listContent"></div>
+    </section>
+
+    <footer>
+      <div class="footer-brand"><span class="brand-mark">✦</span> ハナシノタネ</div>
+      <p>会話に困ったときの、小さなきっかけ。</p>
+      <small>お気に入りや履歴はこの端末のブラウザ内だけに保存されます。</small>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+  </div>
+  <script src="topics.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
